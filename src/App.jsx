@@ -121,7 +121,17 @@ const App = () => {
               marginBottom: 10,
             }}
           />
-
+          <div
+            style={{
+              textAlign: "right",
+              fontSize: 12,
+              color: newsHeadline.length >= 100 ? "red" : "gray",
+              fontWeight: newsHeadline.length >= 100 ? "bold" : "normal",
+              marginBottom: 10,
+            }}
+          >
+            {newsHeadline.length}/100 characters
+          </div>
           <div style={{ marginBottom: 10 }}>
             <label>Upload Background Image:</label>
             <input
@@ -294,7 +304,7 @@ const App = () => {
 
       {/* MEME CREATOR */}
       {activeTab === "memes" && (
-        <div style={{ textAlign: "center", color: "white" }}>
+        <div style={{ textAlign: "center", color: "black" }}>
           <h2>HBCU Shaderoom Memes Creator</h2>
 
           <input
