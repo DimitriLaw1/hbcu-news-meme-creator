@@ -150,7 +150,7 @@ const App = () => {
                 overflow: "hidden",
                 backgroundColor: "#000",
                 margin: "auto",
-                border: "2px solid #ccc",
+                border: "none",
               }}
             >
               <div
