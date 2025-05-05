@@ -530,33 +530,30 @@ const App = () => {
                   display: "flex",
                   alignItems: "center",
                   marginBottom: 30,
-                  marginTop: 200,
+                  marginTop: 80,
                 }}
               >
                 <img
-                  src={hbculogo}
+                  src={whitelogo}
                   alt="Profile"
                   style={{
-                    width: 200,
-                    height: 200,
-                    borderRadius: "50%",
+                    width: 100,
+                    height: 100,
                     marginRight: 10,
-                    background: "black",
-                    paddingBottom: 10,
                   }}
                 />
                 <div>
-                  <div style={{ fontSize: 60, fontWeight: "bold" }}>
+                  <div style={{ fontSize: 50, fontWeight: "bold" }}>
                     HBCUshaderoom
                   </div>
-                  <div style={{ fontSize: 40, color: "gray" }}>
+                  <div style={{ fontSize: 30, color: "gray" }}>
                     @hbcu.shaderoom
                   </div>
                 </div>
               </div>
               <div
                 style={{
-                  fontSize: 50,
+                  fontSize: 45,
                   lineHeight: 1.4,
                   whiteSpace: "pre-wrap",
                   fontWeight: "normal",
