@@ -12,21 +12,35 @@ const App = () => {
   const [newsBackground, setNewsBackground] = useState(null);
   const [newsCircle, setNewsCircle] = useState(null);
   const newsRef = useRef(null);
+  const [newsCategory, setNewsCategory] = useState("NEWS"); // category for red box
 
   // Meme tab state
   const [memeCaption, setMemeCaption] = useState("");
   const [memeImage, setMemeImage] = useState(null);
   const memeRef = useRef(null);
 
+  // Confession tab state
+  const [confessionText, setConfessionText] = useState("");
+  const confessionRef = useRef(null);
+  const [confessionSchool, setConfessionSchool] = useState("");
+
   useEffect(() => {
     document.title =
       activeTab === "news"
         ? "HBCU Shaderoom News Creator"
-        : "HBCU Shaderoom Memes Creator";
+        : activeTab === "memes"
+        ? "HBCU Shaderoom Memes Creator"
+        : "HBCU Confessions Creator";
   }, [activeTab]);
 
   const handleDownload = async () => {
-    const targetRef = activeTab === "news" ? newsRef : memeRef;
+    const targetRef =
+      activeTab === "news"
+        ? newsRef
+        : activeTab === "memes"
+        ? memeRef
+        : confessionRef;
+
     const canvas = await html2canvas(targetRef.current, {
       useCORS: true,
       scale: 1,
@@ -35,8 +49,7 @@ const App = () => {
     });
 
     const link = document.createElement("a");
-    link.download =
-      activeTab === "news" ? "news_template.png" : "meme_template.png";
+    link.download = `${activeTab}_template.png`;
     link.href = canvas.toDataURL();
     link.click();
   };
@@ -60,7 +73,7 @@ const App = () => {
         margin: "auto",
       }}
     >
-      {/* TAB SWITCHER */}
+      {/* Tab Switcher */}
       <div
         style={{
           display: "flex",
@@ -69,39 +82,32 @@ const App = () => {
           marginBottom: 20,
         }}
       >
-        <button
-          onClick={() => setActiveTab("news")}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: activeTab === "news" ? "#3b82f6" : "#eee",
-            color: activeTab === "news" ? "#fff" : "#000",
-            border: "none",
-            borderRadius: 5,
-            cursor: "pointer",
-          }}
-        >
-          News Creator
-        </button>
-        <button
-          onClick={() => setActiveTab("memes")}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: activeTab === "memes" ? "#3b82f6" : "#eee",
-            color: activeTab === "memes" ? "#fff" : "#000",
-            border: "none",
-            borderRadius: 5,
-            cursor: "pointer",
-          }}
-        >
-          Memes Creator
-        </button>
+        {[
+          { key: "news", label: "News Creator" },
+          { key: "memes", label: "Memes Creator" },
+          { key: "confessions", label: "Confessions Creator" },
+        ].map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: activeTab === tab.key ? "#3b82f6" : "#eee",
+              color: activeTab === tab.key ? "#fff" : "#000",
+              border: "none",
+              borderRadius: 5,
+              cursor: "pointer",
+            }}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
-      {/* NEWS CREATOR */}
+      {/* News Creator */}
       {activeTab === "news" && (
         <>
           <h2 style={{ textAlign: "center" }}>HBCU Shaderoom News Creator</h2>
-
           <input
             type="text"
             placeholder="Type news headline"
@@ -121,6 +127,29 @@ const App = () => {
               marginBottom: 10,
             }}
           />
+          {/* Category Dropdown + Red Rectangle Label */}
+          <div style={{ marginBottom: 20 }}>
+            <select
+              value={newsCategory}
+              onChange={(e) => setNewsCategory(e.target.value)}
+              style={{
+                width: "100%",
+                height: 40,
+                padding: "0 10px",
+                fontSize: 16,
+                border: "1px solid #ccc",
+                borderRadius: 4,
+                backgroundColor: "white",
+                marginBottom: 10,
+                color: "black",
+              }}
+            >
+              <option value="NEWS">NEWS</option>
+              <option value="SPORTS">SPORTS</option>
+              <option value="FASHION">FASHION</option>
+              <option value="MUSIC">MUSIC</option>
+            </select>
+          </div>
           <div
             style={{
               textAlign: "right",
@@ -140,7 +169,6 @@ const App = () => {
               onChange={(e) => handleImageUpload(e, setNewsBackground)}
             />
           </div>
-
           <div style={{ marginBottom: 10 }}>
             <label>Upload Circle Image:</label>
             <input
@@ -149,7 +177,6 @@ const App = () => {
               onChange={(e) => handleImageUpload(e, setNewsCircle)}
             />
           </div>
-
           <div style={{ width: "100%", overflowX: "auto", margin: "20px 0" }}>
             <div
               ref={newsRef}
@@ -186,7 +213,6 @@ const App = () => {
                   />
                 )}
               </div>
-
               <div
                 style={{
                   position: "absolute",
@@ -196,7 +222,6 @@ const App = () => {
                   backgroundColor: "black",
                 }}
               ></div>
-
               {newsCircle && (
                 <div
                   style={{
@@ -223,7 +248,6 @@ const App = () => {
                   />
                 </div>
               )}
-
               <div
                 style={{
                   position: "absolute",
@@ -239,16 +263,41 @@ const App = () => {
               >
                 <div
                   style={{
-                    textAlign: "center",
-                    color: "white",
-                    fontSize: 72,
-                    lineHeight: 1.2,
-                    wordWrap: "break-word",
-                    overflowWrap: "break-word",
-                    fontFamily: "Impact, sans-serif",
+                    display: "flex",
+                    flexDirection: "column", // 💡 stack vertically
+                    alignItems: "center",
+                    gap: 10,
                   }}
                 >
-                  {newsHeadline.toUpperCase()}
+                  {/* Red rectangle display */}
+                  <div
+                    style={{
+                      backgroundColor: "red", // uses same red as your circle border
+                      color: "black",
+                      textAlign: "center",
+                      fontWeight: "bold",
+                      fontSize: 24,
+                      padding: "6px 0",
+                      width: 250,
+                      margin: "auto",
+                      borderRadius: 4,
+                    }}
+                  >
+                    {newsCategory}
+                  </div>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      color: "white",
+                      fontSize: 72,
+                      lineHeight: 1.2,
+                      wordWrap: "break-word",
+                      overflowWrap: "break-word",
+                      fontFamily: "Impact, sans-serif",
+                    }}
+                  >
+                    {newsHeadline.toUpperCase()}
+                  </div>
                 </div>
               </div>
               <div
@@ -287,7 +336,6 @@ const App = () => {
               </div>
             </div>
           </div>
-
           <button
             onClick={handleDownload}
             style={{
@@ -302,11 +350,10 @@ const App = () => {
         </>
       )}
 
-      {/* MEME CREATOR */}
+      {/* Meme Creator */}
       {activeTab === "memes" && (
         <div style={{ textAlign: "center", color: "black" }}>
           <h2>HBCU Shaderoom Memes Creator</h2>
-
           <input
             type="text"
             placeholder="Enter meme caption"
@@ -325,14 +372,12 @@ const App = () => {
               boxSizing: "border-box",
             }}
           />
-
           <input
             type="file"
             accept="image/*"
             onChange={(e) => handleImageUpload(e, setMemeImage)}
             style={{ marginBottom: 20 }}
           />
-
           <div style={{ width: "100%", overflowX: "auto", marginBottom: 20 }}>
             <div
               ref={memeRef}
@@ -376,7 +421,6 @@ const App = () => {
                   </div>
                 </div>
               </div>
-
               <div
                 style={{
                   fontSize: 72,
@@ -388,7 +432,6 @@ const App = () => {
               >
                 {memeCaption}
               </div>
-
               {memeImage && (
                 <img
                   src={memeImage}
@@ -396,7 +439,6 @@ const App = () => {
                   style={{
                     width: "100%",
                     height: 900,
-                    maxHeight: 900,
                     objectFit: "cover",
                     objectPosition: "top",
                     borderRadius: 12,
@@ -406,7 +448,6 @@ const App = () => {
               )}
             </div>
           </div>
-
           <button
             onClick={handleDownload}
             style={{
@@ -421,6 +462,138 @@ const App = () => {
             }}
           >
             Download Meme
+          </button>
+        </div>
+      )}
+
+      {/* Confession Creator */}
+      {activeTab === "confessions" && (
+        <div style={{ textAlign: "center", color: "black" }}>
+          <h2>HBCU Confessions Creator</h2>
+          <textarea
+            placeholder="Enter confession text"
+            value={confessionText}
+            onChange={(e) => setConfessionText(e.target.value)}
+            rows={10}
+            style={{
+              width: "100%",
+              fontSize: 16,
+              backgroundColor: "white",
+              color: "black",
+              padding: 10,
+              marginBottom: 10,
+              border: "1px solid #ccc",
+              borderRadius: 4,
+              boxSizing: "border-box",
+              resize: "none",
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Enter school name (e.g. - WSSU)"
+            value={confessionSchool}
+            onChange={(e) => setConfessionSchool(e.target.value)}
+            style={{
+              width: "100%",
+              fontSize: 16,
+              backgroundColor: "white",
+              color: "black",
+              height: 40,
+              marginBottom: 20,
+              padding: "0 10px",
+              border: "1px solid #ccc",
+              borderRadius: 4,
+              boxSizing: "border-box",
+            }}
+          />
+
+          <div style={{ width: "100%", overflowX: "auto", marginBottom: 20 }}>
+            <div
+              ref={confessionRef}
+              style={{
+                width: 1125,
+                height: 1086,
+                backgroundColor: "white",
+                color: "black",
+                borderRadius: 20,
+                padding: 40,
+                fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+                boxSizing: "border-box",
+                overflow: "hidden",
+                margin: "auto",
+                display: "block",
+                textAlign: "left",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: 30,
+                  marginTop: 200,
+                }}
+              >
+                <img
+                  src={hbculogo}
+                  alt="Profile"
+                  style={{
+                    width: 200,
+                    height: 200,
+                    borderRadius: "50%",
+                    marginRight: 10,
+                    background: "black",
+                    paddingBottom: 10,
+                  }}
+                />
+                <div>
+                  <div style={{ fontSize: 60, fontWeight: "bold" }}>
+                    HBCUshaderoom
+                  </div>
+                  <div style={{ fontSize: 40, color: "gray" }}>
+                    @hbcu.shaderoom
+                  </div>
+                </div>
+              </div>
+              <div
+                style={{
+                  fontSize: 50,
+                  lineHeight: 1.4,
+                  whiteSpace: "pre-wrap",
+                  fontWeight: "normal",
+                  marginBottom: 40,
+                }}
+              >
+                {confessionText}
+              </div>
+
+              {confessionSchool && (
+                <div
+                  style={{
+                    fontSize: 30,
+                    marginTop: 40,
+                    whiteSpace: "pre-wrap",
+                    fontWeight: "normal",
+                  }}
+                >
+                  {confessionSchool}
+                </div>
+              )}
+            </div>
+          </div>
+          <button
+            onClick={handleDownload}
+            style={{
+              padding: "10px 20px",
+              fontSize: 16,
+              backgroundColor: "#3b82f6",
+              color: "white",
+              border: "none",
+              borderRadius: 4,
+              cursor: "pointer",
+              width: "100%",
+            }}
+          >
+            Download Confession
           </button>
         </div>
       )}
