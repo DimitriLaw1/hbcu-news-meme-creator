@@ -368,7 +368,7 @@ const App = () => {
                   }}
                 />
                 <div>
-                  <div style={{ fontSize: 30, fontWeight: "bold" }}>
+                  <div style={{ fontSize: 40, fontWeight: "bold" }}>
                     HBCUshaderoom
                   </div>
                   <div style={{ fontSize: 30, color: "gray" }}>
