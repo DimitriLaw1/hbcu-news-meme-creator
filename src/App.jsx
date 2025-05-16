@@ -253,12 +253,13 @@ const App = () => {
                   position: "absolute",
                   bottom: 0,
                   width: "100%",
-                  height: 459,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "0 40px",
+                  padding: "40px",
                   boxSizing: "border-box",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 20,
+                  backgroundColor: "black",
                 }}
               >
                 <div
@@ -289,11 +290,13 @@ const App = () => {
                     style={{
                       textAlign: "center",
                       color: "white",
-                      fontSize: 72,
+                      fontSize: 64,
                       lineHeight: 1.2,
                       wordWrap: "break-word",
                       overflowWrap: "break-word",
                       fontFamily: "Impact, sans-serif",
+                      maxWidth: "100%",
+                      marginBottom: 20,
                     }}
                   >
                     {newsHeadline.toUpperCase()}
@@ -303,7 +306,7 @@ const App = () => {
               <div
                 style={{
                   position: "absolute",
-                  bottom: 20,
+                  bottom: 0,
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
@@ -323,7 +326,7 @@ const App = () => {
                 <img
                   src={hbculogo}
                   alt="HBCU Logo"
-                  style={{ width: 100, height: "auto" }}
+                  style={{ width: 70, height: "auto" }}
                 />
                 <div
                   style={{
