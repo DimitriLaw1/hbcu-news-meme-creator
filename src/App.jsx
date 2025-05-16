@@ -290,7 +290,7 @@ const App = () => {
                     style={{
                       textAlign: "center",
                       color: "white",
-                      fontSize: 64,
+                      fontSize: 72,
                       lineHeight: 1.2,
                       wordWrap: "break-word",
                       overflowWrap: "break-word",
